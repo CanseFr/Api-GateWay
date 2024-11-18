@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from '../logo.svg';
+import '../App.css';
 import Grid from "@mui/material/Grid2";
 import {Button, TextField} from "@mui/material";
 
@@ -10,7 +10,7 @@ interface UserLogin {
     password: string;
 }
 
-function App() {
+export const Login = () => {
     const [user, setUser] = React.useState<UserLogin>({ email: "", password: "" });
 
     const handleSendLogin = (event?: React.FormEvent) => {
@@ -39,9 +39,8 @@ function App() {
                 </form>
             </header>
         </div>
-);
+    );
 }
 
-export default App;
 
 
