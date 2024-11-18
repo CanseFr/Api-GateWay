@@ -4,7 +4,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { Login } from "./login";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {Users} from "./users";
+import {Products} from "./products";
 import {Register} from "./register";
 
 const router = createBrowserRouter([
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     },
     {
         path: "users",
-        element: <Users />,
+        element: <Products />,
     },
 ]);
 
