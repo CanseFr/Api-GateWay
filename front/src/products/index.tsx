@@ -4,6 +4,7 @@ import {Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import CachedIcon from '@mui/icons-material/Cached';
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
+import ClearIcon from '@mui/icons-material/Clear';
 
 interface Product {
     id: number;
@@ -24,13 +25,11 @@ export const Products = () => {
         const fetchProducts = async () => {
             try {
                 const accessToken = localStorage.getItem('accessToken');
-                console.log('Access Token:', accessToken);
 
                 if (!accessToken) {
-                    throw new Error('Token manquant, impossible de continuer.');
+                    throw new Error('Token manquant, impossible de continuer.')
                 }
 
-                console.log('Envoi de la requête GET à http://localhost:3003/products');
                 const response = await fetch('http://localhost:3003/products', {
                     method: 'GET',
                     headers: {
@@ -39,10 +38,8 @@ export const Products = () => {
                     },
                 });
 
-                console.log('Réponse reçue:', response);
-
                 if (!response.ok) {
-                    throw new Error(`Erreur HTTP! Status: ${response.status}`);
+                    throw new Error(`Erreur HTTP! Status: ${response.status}`)
                 }
 
                 return await response.json();
@@ -57,6 +54,35 @@ export const Products = () => {
         fetchProducts().then(r => setProducts(r));
     }, []);
 
+    const  handleDeleteProduct = async(id: number) => {
+        console.log(id);
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+
+            if (!accessToken) {
+                throw new Error('Token manquant, impossible de continuer.')
+            }
+
+            const response = await fetch(`http://localhost:3003/products/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${accessToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP! Status: ${response.status}`)
+            }
+
+        } catch (err: any) {
+            console.error('Erreur lors de la récupération des produits:', err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
 
     if (loading) {
         return <p>Loading pizzas...</p>;
@@ -70,28 +96,63 @@ export const Products = () => {
     }
 
     return (
-        <Grid container justifyContent="space-between">
-            <Grid>
-                <h1>Pizza List</h1>
-                <ul>
-                    {products.map((product) => (
-                        <li key={product.id}>
-                            <h2>{product.title}</h2>
-                            <p>{product.description}</p>
-                            <p>Prix: {product.price} €</p>
-                        </li>
-                    ))}
-                </ul>
+        <Grid>
 
+            <Grid container justifyContent="space-between">
+                <Grid>
+
+                    <h1>Pizza List</h1>
+                    <ul>
+                        {products.map((product) => (
+                            <Grid container alignItems="center" key={product.id}>
+
+                                <Grid>
+                                    <li key={product.id}>
+                                        <h2>{product.title}</h2>
+                                        <p>{product.description}</p>
+                                        <p>Prix: {product.price} €</p>
+                                    </li>
+                                </Grid>
+                                <Grid>
+                                    <Button color="error" onClick={() => handleDeleteProduct(product.id)}><ClearIcon/></Button>
+                                </Grid>
+
+                            </Grid>
+                        ))}
+                    </ul>
+                </Grid>
+                <Grid>
+                    <Button onClick={() => localStorage.removeItem('accessToken')} color="error">
+                        <AutoDeleteIcon/>
+                    </Button>
+                    <Button onClick={() => nav('/products')} color="secondary">
+                        <CachedIcon/>
+                    </Button>
+                </Grid>
             </Grid>
-            <Grid>
-                <Button onClick={() => localStorage.removeItem('accessToken')} color="error">
-                    <AutoDeleteIcon/>
-                </Button>
-                <Button onClick={() => nav('/products')} color="secondary">
-                    <CachedIcon/>
-                </Button>
-            </Grid>
+
+
+            {/*    Formulaire creation */}
+            {/*    <Grid>*/}
+            {/*        <Accordion >*/}
+            {/*            <AccordionSummary*/}
+            {/*                sx={{backgroundColor: '#0982'}}*/}
+            {/*                expandIcon={<ExpandMoreIcon/>}*/}
+            {/*                aria-controls="panel1-content"*/}
+            {/*                id="panel1-header"*/}
+            {/*            >*/}
+            {/*                Creation*/}
+            {/*            </AccordionSummary>*/}
+            {/*            <AccordionDetails>*/}
+            {/*               */}
+            {/*                */}
+            {/*                */}
+            {/*                */}
+            {/*            </AccordionDetails>*/}
+            {/*        </Accordion>*/}
+
+            {/*</Grid>*/}
+
         </Grid>
     );
 };
