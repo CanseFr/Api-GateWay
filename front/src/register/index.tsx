@@ -1,21 +1,15 @@
-import React from 'react';
-import logo from '../logo.svg';
-import '../App.css';
 import Grid from "@mui/material/Grid2";
 import {Button, TextField, Typography} from "@mui/material";
-import {useNavigate, useNavigation} from "react-router-dom";
+import React from "react";
+import {useNavigate} from "react-router-dom";
+import {UserLogin} from "../login";
 
+export const Register = () => {
+    const [user, setUser] = React.useState<UserLogin>({email: "", password: ""});
 
-export interface UserLogin {
-    email: string;
-    password: string;
-}
-
-export const Login = () => {
-    const [user, setUser] = React.useState<UserLogin>({ email: "", password: "" });
     const nav = useNavigate();
 
-    const handleSendLogin = (event?: React.FormEvent) => {
+    const handleSendRegister = (event?: React.FormEvent) => {
         // Effectuer la requête
         if (event) event.preventDefault();
         console.log(user);
@@ -27,24 +21,19 @@ export const Login = () => {
             [field]: event.target.value,
         }));
     };
-
     return (
         <div className="App">
-            <Typography component="h1" variant="h5">Login</Typography>
+            <Typography component="h1" variant="h5">Register</Typography>
             <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" width={150}/>
-                <form onSubmit={handleSendLogin}>
+                <form onSubmit={handleSendRegister}>
                     <Grid container flexDirection="column" spacing={2} sx={{backgroundColor: "white", borderRadius: "15px", padding: "50px"}}>
                         <TextField onChange={handleChange("email")} label="Email" variant="outlined"/>
                         <TextField onChange={handleChange("password")} label="Password" variant="outlined" type="password"/>
-                        <Button type="submit" onClick={handleSendLogin}>Login</Button>
-                        <Button onClick={()=>nav("register")}>Register</Button>
+                        <Button type="submit" onClick={handleSendRegister}>Register</Button>
+                        <Button onClick={() => nav("/")}>Back To Login</Button>
                     </Grid>
                 </form>
             </header>
         </div>
-    );
+    )
 }
-
-
-

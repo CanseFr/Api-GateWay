@@ -2,10 +2,19 @@
   "name": "monorepo-microservice-apigateway",
   "version": "1.0.0",
   "description": "Discover micro service",
-  "workspaces": ["front"],
+  "workspaces": [
+    "front",
+    "auth-service"
+  ],
   "scripts": {
-    "start:front": "npm --prefix front start"
+    "start:front": "npm --prefix front start",
+    "start:auth-service": "npm --prefix auth-service start",
+    "start:all": "concurrently \"npm run start:front\" \"npm run start:auth-service\"",
+    "seed:auth-service": "npm --prefix auth-service run seed"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
 }
