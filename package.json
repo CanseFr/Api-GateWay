@@ -1,0 +1,11 @@
+{
+  "name": "monorepo-microservice-apigateway",
+  "version": "1.0.0",
+  "description": "Discover micro service",
+  "workspaces": ["front"],
+  "scripts": {
+    "start:front": "npm --prefix front start"
+  },
+  "author": "",
+  "license": "ISC"
+}
