@@ -9,7 +9,8 @@
   "scripts": {
     "start:front": "npm --prefix front start",
     "start:auth-service": "npm --prefix auth-service start",
-    "start:all": "concurrently \"npm run start:front\" \"npm run start:auth-service\"",
+    "start:product-service": "npm --prefix product-service start",
+    "start:all": "concurrently \"npm run start:front\" \"npm run start:auth-service\" \"npm run start:product-service\"",
     "seed:auth-service": "npm --prefix auth-service run seed"
   },
   "author": "",
