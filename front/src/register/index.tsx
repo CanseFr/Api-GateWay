@@ -6,13 +6,31 @@ import {UserLogin} from "../login";
 
 export const Register = () => {
     const [user, setUser] = React.useState<UserLogin>({email: "", password: ""});
+    const [alert, setAlert] = React.useState<String>();
 
     const nav = useNavigate();
 
     const handleSendRegister = (event?: React.FormEvent) => {
-        // Effectuer la requête
         if (event) event.preventDefault();
-        console.log(user);
+        fetch("http://localhost:3001/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                nav("/")
+            })
+            .catch((error) => {
+                console.error("Error creating user:", error);
+            });
     };
 
     const handleChange = (field: keyof UserLogin) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +42,7 @@ export const Register = () => {
     return (
         <div className="App">
             <Typography component="h1" variant="h5">Register</Typography>
+            {alert && <Typography color="error">Erreur durant l'inscription</Typography>}
             <header className="App-header">
                 <form onSubmit={handleSendRegister}>
                     <Grid container flexDirection="column" spacing={2} sx={{backgroundColor: "white", borderRadius: "15px", padding: "50px"}}>
