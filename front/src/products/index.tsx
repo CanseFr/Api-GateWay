@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from 'react';
+import Grid from "@mui/material/Grid2";
+import {Button} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+import CachedIcon from '@mui/icons-material/Cached';
+import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 
 interface Product {
     id: number;
+    title: string;
     name: string;
     description: string;
     price: number;
@@ -11,6 +17,8 @@ export const Products = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const nav = useNavigate();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -55,21 +63,35 @@ export const Products = () => {
     }
 
     if (error) {
-        return <p>Error: {error}</p>;
+        return <Grid padding={1} mt={30} textAlign="center" sx={{backgroundColor: '#0982', borderRadius: "15px"}}>
+            <p>Error: {error}</p>
+            <Button onClick={() => nav("/")}>Retourner au login</Button>
+        </Grid>
     }
 
     return (
-        <div>
-            <h1>Pizza List</h1>
-            <ul>
-                {products.map((product) => (
-                    <li key={product.id}>
-                        <h2>{product.name}</h2>
-                        <p>{product.description}</p>
-                        <p>Price: ${product.price}</p>
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <Grid container justifyContent="space-between">
+            <Grid>
+                <h1>Pizza List</h1>
+                <ul>
+                    {products.map((product) => (
+                        <li key={product.id}>
+                            <h2>{product.title}</h2>
+                            <p>{product.description}</p>
+                            <p>Prix: {product.price} €</p>
+                        </li>
+                    ))}
+                </ul>
+
+            </Grid>
+            <Grid>
+                <Button onClick={() => localStorage.removeItem('accessToken')} color="error">
+                    <AutoDeleteIcon/>
+                </Button>
+                <Button onClick={() => nav('/products')} color="secondary">
+                    <CachedIcon/>
+                </Button>
+            </Grid>
+        </Grid>
     );
 };
