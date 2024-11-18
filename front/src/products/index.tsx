@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Grid2";
-import {Button} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Button, TextField} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import CachedIcon from '@mui/icons-material/Cached';
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import ClearIcon from '@mui/icons-material/Clear';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {UserLogin} from "../login";
 
 interface Product {
-    id: number;
+    id?: number;
     title: string;
-    name: string;
     description: string;
     price: number;
 }
@@ -18,6 +19,7 @@ export const Products = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [product, setProduct] = React.useState<Product>({price: 0, title: "", description:""});
 
     const nav = useNavigate();
 
@@ -83,6 +85,26 @@ export const Products = () => {
         }
     }
 
+    const handleCreateProduct = () =>{
+        const accessToken = localStorage.getItem('accessToken');
+
+        fetch('http://localhost:3003/products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${accessToken}`,
+            },
+            body: JSON.stringify(product),
+        });
+    }
+
+    const handleChange = (field: keyof Product) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        setProduct((prevProd) => ({
+            ...prevProd,
+            [field]:  field === "price" ? Number(event.target.value):event.target.value,
+        }));
+    };
+
 
     if (loading) {
         return <p>Loading pizzas...</p>;
@@ -114,7 +136,7 @@ export const Products = () => {
                                     </li>
                                 </Grid>
                                 <Grid>
-                                    <Button color="error" onClick={() => handleDeleteProduct(product.id)}><ClearIcon/></Button>
+                                    <Button color="error" onClick={() => handleDeleteProduct(product.id!)}><ClearIcon/></Button>
                                 </Grid>
 
                             </Grid>
@@ -125,33 +147,37 @@ export const Products = () => {
                     <Button onClick={() => localStorage.removeItem('accessToken')} color="error">
                         <AutoDeleteIcon/>
                     </Button>
-                    <Button onClick={() => nav('/products')} color="secondary">
-                        <CachedIcon/>
-                    </Button>
                 </Grid>
             </Grid>
 
 
             {/*    Formulaire creation */}
-            {/*    <Grid>*/}
-            {/*        <Accordion >*/}
-            {/*            <AccordionSummary*/}
-            {/*                sx={{backgroundColor: '#0982'}}*/}
-            {/*                expandIcon={<ExpandMoreIcon/>}*/}
-            {/*                aria-controls="panel1-content"*/}
-            {/*                id="panel1-header"*/}
-            {/*            >*/}
-            {/*                Creation*/}
-            {/*            </AccordionSummary>*/}
-            {/*            <AccordionDetails>*/}
-            {/*               */}
-            {/*                */}
-            {/*                */}
-            {/*                */}
-            {/*            </AccordionDetails>*/}
-            {/*        </Accordion>*/}
+                <Grid>
+                    <Accordion >
+                        <AccordionSummary
+                            sx={{backgroundColor: '#0982'}}
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel1-content"
+                            id="panel1-header"
+                        >
+                            Creation
+                        </AccordionSummary>
+                        <AccordionDetails>
 
-            {/*</Grid>*/}
+
+                            {/*<form onSubmit={handleCreateProduct}>*/}
+                                <Grid container flexDirection="column" spacing={2} sx={{backgroundColor: "white", borderRadius: "15px", padding: "50px"}}>
+                                    <TextField onChange={handleChange("title")} label="Titre" variant="outlined"/>
+                                    <TextField onChange={handleChange("description")} label="Description" variant="outlined" />
+                                    <TextField onChange={handleChange("price")} label="Prix" variant="outlined" />
+                                    <Button type="submit" onClick={handleCreateProduct}>Créer</Button>
+                                </Grid>
+                            {/*</form>*/}
+
+                        </AccordionDetails>
+                    </Accordion>
+
+                </Grid>
 
         </Grid>
     );
