@@ -4,8 +4,7 @@ import {ProxyService} from './proxy.service';
 
 @Controller()
 export class ProxyController {
-    constructor(private readonly proxyService: ProxyService) {
-    }
+    constructor(private readonly proxyService: ProxyService) {}
 
     @All('*')
     async checkRequest(@Req() req: Request, @Res() res: Response) {

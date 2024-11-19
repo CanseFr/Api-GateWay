@@ -5,12 +5,13 @@ import {useNavigate} from "react-router-dom";
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import ClearIcon from '@mui/icons-material/Clear';
 import {CreateProduct} from "../../components/create-product";
-import {BasketProduct} from "../../components/basket-product";
+// import {BasketProduct} from "../../components/basket-product";
 import {Product} from "../../types";
 
 
 export const Products = () => {
     const [products, setProducts] = useState<Product[]>([]);
+    const [basket, setBasket] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -111,6 +112,9 @@ export const Products = () => {
                                 <Grid>
                                     <Button color="error" onClick={() => handleDeleteProduct(product.id!)}><ClearIcon/></Button>
                                 </Grid>
+                                {/*<Grid>*/}
+                                {/*    <Button color="secondary" onClick={() => setBasket(...basket, )}><ClearIcon/></Button>*/}
+                                {/*</Grid>*/}
 
                             </Grid>
                         ))}
@@ -124,7 +128,7 @@ export const Products = () => {
             </Grid>
 
             <CreateProduct/>
-            <BasketProduct/>
+            {/*<BasketProduct  basket={basket} setBasket={setBasket}/>*/}
         </Grid>
     );
 };

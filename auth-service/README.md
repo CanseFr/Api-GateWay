@@ -54,6 +54,12 @@ npx prisma db seed
 ```
 
 
+# create .env
+```bash
+DATABASE_URL="service://user:password@localhost:port/db-name?schema=public"
+```
+
+
 ## Run tests
 
 ```bash
