@@ -1,3 +1,6 @@
-export declare class AppService {
-    getHello(): string;
+import { OnModuleInit } from '@nestjs/common';
+export declare class AppService implements OnModuleInit {
+    private readonly logger;
+    onModuleInit(): void;
+    consumeMessages(): void;
 }

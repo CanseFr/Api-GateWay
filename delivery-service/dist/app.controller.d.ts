@@ -1,6 +1,5 @@
-import { OnModuleInit } from '@nestjs/common';
-export declare class AppController implements OnModuleInit {
-    private readonly logger;
-    onModuleInit(): void;
-    consumeMessages(): void;
+import { AppService } from "./app.service";
+export declare class AppController {
+    private readonly deliveryService;
+    constructor(deliveryService: AppService);
 }

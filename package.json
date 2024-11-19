@@ -15,7 +15,7 @@
     "start:product-service": "npm --prefix product-service start",
     "start:api-gateway": "npm --prefix api-gateway start",
     "start:payment-service": "npm --prefix payment-service start",
-    "start:delivery-service": "npm --prefix payment-service start",
+    "start:delivery-service": "npm --prefix delivery-service start",
     "start:all": "concurrently \"npm run start:front\" \"npm run start:auth-service\" \"npm run start:product-service\" \"npm run start:api-gateway\" \"npm run start:payment-service\" \"npm run start:delivery-service\"",
     "seed:auth-service": "npm --prefix auth-service run seed"
   },
