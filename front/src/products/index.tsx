@@ -1,25 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Grid2";
-import {Accordion, AccordionDetails, AccordionSummary, Button, TextField} from "@mui/material";
+import {Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import CachedIcon from '@mui/icons-material/Cached';
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import ClearIcon from '@mui/icons-material/Clear';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {UserLogin} from "../login";
+import {CreateProduct, Product} from "../create-product";
 
-interface Product {
-    id?: number;
-    title: string;
-    description: string;
-    price: number;
-}
 
 export const Products = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [product, setProduct] = React.useState<Product>({price: 0, title: "", description:""});
 
     const nav = useNavigate();
 
@@ -56,7 +47,7 @@ export const Products = () => {
         fetchProducts().then(r => setProducts(r));
     }, []);
 
-    const  handleDeleteProduct = async(id: number) => {
+    const handleDeleteProduct = async (id: number) => {
         console.log(id);
         try {
             const accessToken = localStorage.getItem('accessToken');
@@ -84,26 +75,6 @@ export const Products = () => {
             setLoading(false);
         }
     }
-
-    const handleCreateProduct = () =>{
-        const accessToken = localStorage.getItem('accessToken');
-
-        fetch('http://localhost:3003/products', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `${accessToken}`,
-            },
-            body: JSON.stringify(product),
-        });
-    }
-
-    const handleChange = (field: keyof Product) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        setProduct((prevProd) => ({
-            ...prevProd,
-            [field]:  field === "price" ? Number(event.target.value):event.target.value,
-        }));
-    };
 
 
     if (loading) {
@@ -150,35 +121,7 @@ export const Products = () => {
                 </Grid>
             </Grid>
 
-
-            {/*    Formulaire creation */}
-                <Grid>
-                    <Accordion >
-                        <AccordionSummary
-                            sx={{backgroundColor: '#0982'}}
-                            expandIcon={<ExpandMoreIcon/>}
-                            aria-controls="panel1-content"
-                            id="panel1-header"
-                        >
-                            Creation
-                        </AccordionSummary>
-                        <AccordionDetails>
-
-
-                            {/*<form onSubmit={handleCreateProduct}>*/}
-                                <Grid container flexDirection="column" spacing={2} sx={{backgroundColor: "white", borderRadius: "15px", padding: "50px"}}>
-                                    <TextField onChange={handleChange("title")} label="Titre" variant="outlined"/>
-                                    <TextField onChange={handleChange("description")} label="Description" variant="outlined" />
-                                    <TextField onChange={handleChange("price")} label="Prix" variant="outlined" />
-                                    <Button type="submit" onClick={handleCreateProduct}>Créer</Button>
-                                </Grid>
-                            {/*</form>*/}
-
-                        </AccordionDetails>
-                    </Accordion>
-
-                </Grid>
-
+            <CreateProduct/>
         </Grid>
     );
 };
