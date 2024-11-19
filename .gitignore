@@ -5,6 +5,7 @@
 **/.idea
 
 auth-service/node_modules
+payment-service/node_modules
 api-gateway/node_modules
 api-gateway/dist
 **/api-gateway/dist
@@ -12,6 +13,7 @@ product-service/node_modules
 
 # compiled output
 **/auth-service/dist
+**/payment-service/dist
 **/product-service/dist
 **/product-service/node_modules
 **/api-gateway/node_modules
