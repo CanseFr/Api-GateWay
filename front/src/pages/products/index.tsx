@@ -8,6 +8,7 @@ import {CreateProduct} from "../../components/create-product";
 import {Product} from "../../types";
 import {BasketProduct} from "../../components/basket-product";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import {DeliveryProduct} from "../../components/delivery-product";
 
 
 export const Products = () => {
@@ -137,6 +138,7 @@ export const Products = () => {
 
             <CreateProduct/>
             <BasketProduct  basket={basket} setBasket={setBasket}/>
+            <DeliveryProduct/>
         </Grid>
     );
 };

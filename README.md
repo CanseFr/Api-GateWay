@@ -1,3 +1,5 @@
+Verify all .env of all service who need
+
 First of all it is necessary to create the database by performing a migration
 ```bash
 cd auth-service
@@ -7,6 +9,14 @@ npx prisma migrate dev --name "init"
 Then run the migration
 ```bash
 cd auth-service
+npx prisma db seed
+```
+
+
+Do the same with product:
+```bash
+cd product-service
+npx prisma migrate dev --name "init"
 npx prisma db seed
 ```
 

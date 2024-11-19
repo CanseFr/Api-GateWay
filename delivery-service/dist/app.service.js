@@ -5,17 +5,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var AppService_1;
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppService = void 0;
+exports.MessageService = void 0;
 const common_1 = require("@nestjs/common");
 const amqp = require("amqplib/callback_api");
-let AppService = AppService_1 = class AppService {
-    constructor() {
-        this.logger = new common_1.Logger(AppService_1.name);
-    }
+const socket_io_1 = require("socket.io");
+const http_1 = require("http");
+let MessageService = class MessageService {
+    constructor() { }
     onModuleInit() {
-        this.consumeMessages();
+        const httpServer = (0, http_1.createServer)();
+        this.server = new socket_io_1.Server(httpServer, {
+            cors: {
+                origin: '*',
+            },
+        });
+        httpServer.listen(3002, () => {
+            console.log('Socket.IO server listening on port 3002');
+        });
+        this.server.on('connection', (socket) => {
+            console.log('A user connected');
+        });
     }
     consumeMessages() {
         amqp.connect('amqp://localhost', (error0, connection) => {
@@ -30,12 +43,12 @@ let AppService = AppService_1 = class AppService {
                 channel.assertQueue(queue, {
                     durable: false,
                 });
-                this.logger.log(`Waiting for messages in ${queue}`);
                 console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
                 channel.consume(queue, (msg) => {
                     try {
                         if (msg !== null) {
                             console.log(" [x] Received %s", msg.content.toString());
+                            this.sendAlertDeliveryToFront(msg.content.toString());
                             channel.ack(msg);
                         }
                     }
@@ -48,9 +61,14 @@ let AppService = AppService_1 = class AppService {
             });
         });
     }
+    sendAlertDeliveryToFront(message) {
+        this.server.emit('alert', { message });
+        console.log(`Alert sent to front: ${message}`);
+    }
 };
-exports.AppService = AppService;
-exports.AppService = AppService = AppService_1 = __decorate([
-    (0, common_1.Injectable)()
-], AppService);
+exports.MessageService = MessageService;
+exports.MessageService = MessageService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [])
+], MessageService);
 //# sourceMappingURL=app.service.js.map
