@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const invoiceRoutes = require('./routes/invoiceRoute');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 // Middleware
 app.use(express.json());
