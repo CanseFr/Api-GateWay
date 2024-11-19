@@ -4,7 +4,9 @@ import {Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import ClearIcon from '@mui/icons-material/Clear';
-import {CreateProduct, Product} from "../create-product";
+import {CreateProduct} from "../../components/create-product";
+import {BasketProduct} from "../../components/basket-product";
+import {Product} from "../../types";
 
 
 export const Products = () => {
@@ -122,6 +124,7 @@ export const Products = () => {
             </Grid>
 
             <CreateProduct/>
+            <BasketProduct/>
         </Grid>
     );
 };

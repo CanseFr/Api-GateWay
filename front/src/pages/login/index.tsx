@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from '../logo.svg';
-import '../App.css';
+import logo from '../../logo.svg';
+import '../../App.css';
 import Grid from "@mui/material/Grid2";
 import {Button, TextField, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";

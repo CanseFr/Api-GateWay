@@ -2,23 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { Login } from "./login";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {Products} from "./products";
-import {Register} from "./register";
+import {Login} from "./pages/login";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {Products} from "./pages/products";
+import {Register} from "./pages/register";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Login />,
+        element: <Login/>,
     },
     {
         path: "register",
-        element: <Register />,
+        element: <Register/>,
     },
     {
         path: "products",
-        element: <Products />,
+        element: <Products/>,
     },
 ]);
 
@@ -29,7 +29,7 @@ if (!rootElement) {
 
 ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
+        <RouterProvider router={router}/>
     </React.StrictMode>
 );
 
