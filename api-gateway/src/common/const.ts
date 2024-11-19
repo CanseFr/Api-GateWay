@@ -4,4 +4,5 @@ import {UrlPortType} from "./type";
 export const urlsWithPorts: UrlPortType[] = [
     {port: 3002, url: '/products'},
     {port: 3004, url: '/payments'},
+    {port: 3005, url: '/delivery'},
 ]
