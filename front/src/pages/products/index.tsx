@@ -5,8 +5,9 @@ import {useNavigate} from "react-router-dom";
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import ClearIcon from '@mui/icons-material/Clear';
 import {CreateProduct} from "../../components/create-product";
-// import {BasketProduct} from "../../components/basket-product";
 import {Product} from "../../types";
+import {BasketProduct} from "../../components/basket-product";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 
 export const Products = () => {
@@ -79,6 +80,13 @@ export const Products = () => {
         }
     }
 
+    const handleAddBasket = (product: Product) =>{
+        const itemToAdd = products.find((item) => item.id === product.id);
+        if (itemToAdd) {
+            setBasket([...basket, itemToAdd]);
+        }
+    }
+
 
     if (loading) {
         return <p>Loading pizzas...</p>;
@@ -112,9 +120,9 @@ export const Products = () => {
                                 <Grid>
                                     <Button color="error" onClick={() => handleDeleteProduct(product.id!)}><ClearIcon/></Button>
                                 </Grid>
-                                {/*<Grid>*/}
-                                {/*    <Button color="secondary" onClick={() => setBasket(...basket, )}><ClearIcon/></Button>*/}
-                                {/*</Grid>*/}
+                                <Grid>
+                                    <Button color="secondary" onClick={()=>handleAddBasket(product)}><AddShoppingCartIcon/></Button>
+                                </Grid>
 
                             </Grid>
                         ))}
@@ -128,7 +136,7 @@ export const Products = () => {
             </Grid>
 
             <CreateProduct/>
-            {/*<BasketProduct  basket={basket} setBasket={setBasket}/>*/}
+            <BasketProduct  basket={basket} setBasket={setBasket}/>
         </Grid>
     );
 };

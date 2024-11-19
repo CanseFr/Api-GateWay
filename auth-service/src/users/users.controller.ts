@@ -14,7 +14,6 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) {
     }
 
-
     //REGISTER
     @Post()
     @ApiCreatedResponse({type: UserEntity})

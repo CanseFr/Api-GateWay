@@ -36,7 +36,6 @@ export const Login = () => {
 
             if (data && data.accessToken) {
                 localStorage.setItem("accessToken", `Bearer ${data.accessToken}`);
-
                 nav("/products");
             } else {
                 console.error("No token found in response");

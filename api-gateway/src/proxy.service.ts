@@ -8,7 +8,7 @@ export class ProxyService {
     async processRequest(req: Request) {
 
         const authHeader = req.headers.authorization;
-
+        console.log(authHeader);
         try {
             const authResponse = await getValidateToken(authHeader);
 

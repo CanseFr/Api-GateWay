@@ -1,25 +1,53 @@
 import Grid from "@mui/material/Grid2";
-import {Accordion, AccordionDetails, AccordionSummary} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Button, TextField} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import React, {Dispatch, SetStateAction} from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 import {Product} from "../../types";
+import CloseIcon from '@mui/icons-material/Close';
+
 interface BasketProductProps {
     basket: Product[];
     setBasket: Dispatch<SetStateAction<Product[]>>;
 }
-const BasketProduct: React.FC<BasketProductProps> = ({ basket, setBasket }) => {
 
+export const BasketProduct: React.FC<BasketProductProps> = ({basket, setBasket}) => {
 
-    const handleDeleteUnit = () => {
+    const [name, setName] = useState("");
+    const [adress, setAdress] = useState("");
 
+    const handleDeleteUnit = (index: number) => {
+        setBasket((prevBasket) => {
+            const newBasket = [...prevBasket];
+            newBasket.splice(index, 1);
+            return newBasket;
+        });
     }
 
     const handleDeleteAll = () => {
         setBasket([])
     }
 
-    const handleBuy = () => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleBuy =() => {
+        const accessToken = localStorage.getItem('accessToken');
 
+        fetch('http://localhost:3003/payments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${accessToken}`,
+            },
+            body: JSON.stringify({
+                amount: basket.reduce((total, item) => total + item.price, 0),
+                name,
+                adress,
+            }),
+        })
+            .then(() => {
+                setBasket([]);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
     };
 
     return (<Grid>
@@ -27,34 +55,50 @@ const BasketProduct: React.FC<BasketProductProps> = ({ basket, setBasket }) => {
             <AccordionSummary
                 sx={{backgroundColor: '#0999'}}
                 expandIcon={<ExpandMoreIcon/>}
-                aria-controls="panel1-content"
-                id="panel1-header"
             >
                 Panier
             </AccordionSummary>
             <AccordionDetails>
-
-                {basket ?
-
-                    basket.map((product) => (
-                        <Grid>
-                            <p>{product.title}</p>
-                            <p>{product.price}</p>
+                {basket.length !== 0 ?
+                    basket.map((item, index) => (
+                        <Grid container key={index}>
+                            <Grid key={item.id} container alignItems="center" spacing={1} width="20%" borderRadius="15px" m={1} border="1px solid black">
+                                <p>{item.title}</p>
+                                <p>{item.price} €</p>
+                            </Grid>
+                            <Grid>
+                                <Button color="error" onClick={() => handleDeleteUnit(index)}><CloseIcon/></Button>
+                            </Grid>
                         </Grid>
                     )) :
                     <p>Aucun article dans votre panier</p>
                 }
-                {/*<form onSubmit={handleCreateProduct}>*/}
-                <Grid container flexDirection="column" spacing={2} sx={{backgroundColor: "white", borderRadius: "15px", padding: "50px"}}>
-                    {/*<TextField onChange={handleChange("title")} label="Titre" variant="outlined"/>*/}
-                    {/*<TextField onChange={handleChange("description")} label="Description" variant="outlined"/>*/}
-                    {/*<TextField onChange={handleChange("price")} label="Prix" variant="outlined"/>*/}
-                    {/*<Button type="submit" onClick={handleCreateProduct}>Créer</Button>*/}
-                </Grid>
-                {/*</form>*/}
+                <Grid container justifyContent="space-between">
+                    <Grid>
+                        Total : {basket.reduce((total, item) => total + item.price, 0)} €
+                    </Grid>
+                    <Grid>
+                        <Button onClick={handleBuy}>Payer</Button>
+                    </Grid>
+                    <Grid>
 
+                        <Button color="error" onClick={handleDeleteAll}>Supprimer panier</Button>
+                    </Grid>
+                </Grid>
+                <Grid>
+                    <Grid>
+                        <TextField onChange={(e) => setName(e.target.value)}
+                                   label="Nom" variant="outlined"/>
+                        <TextField onChange={(e) => setAdress(e.target.value)}
+                                   label="Adresse" variant="outlined"/>
+                    </Grid>
+                    <Grid>
+                    </Grid>
+
+                </Grid>
             </AccordionDetails>
         </Accordion>
 
     </Grid>)
 }
+
